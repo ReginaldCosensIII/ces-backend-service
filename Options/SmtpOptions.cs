@@ -2,7 +2,7 @@ namespace CES.BackendService.Options;
 
 public class SmtpOptions
 {
-    public const string SectionName = "Smtp";
+    public const string SectionName = "SmtpOptions";
     
     public string Host { get; set; } = string.Empty;
     public int Port { get; set; }

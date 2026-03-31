@@ -27,15 +27,7 @@ public static class SeminarEndpoints
             }
 
             // 3. Send Email
-            try
-            {
-                await emailService.SendRegistrationEmailAsync(request);
-            }
-            catch (Exception)
-            {
-                // In a real app, we'd log this.
-                return Results.Problem("An error occurred while processing your registration.");
-            }
+            await emailService.SendRegistrationEmailAsync(request);
 
             // 4. Success Response
             return Results.Ok(new { message = "Registration received." });

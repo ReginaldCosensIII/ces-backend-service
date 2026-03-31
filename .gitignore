@@ -482,6 +482,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
-* . c o d e - w o r k s p a c e 
- 
- 
+
+# VS Code files for those working on multiple tools
+*.code-workspace
+.vscode/

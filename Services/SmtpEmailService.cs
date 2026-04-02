@@ -25,7 +25,7 @@ public class SmtpEmailService : IEmailService
         var bodyBuilder = new BodyBuilder
         {
             HtmlBody = $@"
-                <p>A new registration has been submitted for the Strategic AI Integration Seminar.</p>
+                <p>A new registration has been submitted for the Strategic AI Integration & Cybersecurity Lunch & Learn Seminar.</p>
                 <p><strong>Details:</strong><br>
                 - First Name: {request.FirstName}<br>
                 - Last Name: {request.LastName}<br>

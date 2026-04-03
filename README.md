@@ -25,6 +25,7 @@ dotnet user-secrets set "SmtpOptions:ToAddress" "admin@cesitservice.com"
 For production deployments inside IIS, bind the keys securely via Environment Variables utilizing double-underscores (`__`) to declare the hierarchy:
 - `SmtpOptions__Host`
 - `SmtpOptions__Port`
+- `SmtpOptions__EnableSSL`
 - `SmtpOptions__Username`
 - `SmtpOptions__Password`
 - `SmtpOptions__FromAddress`

@@ -92,8 +92,8 @@ app.UseHttpsRedirection();
 app.UseRateLimiter();
 
 // 4. Map Endpoints
-// Note: Internal mapping to /seminar/register
-// IIS Sub-application at /api will make this effectively /api/seminar/register
-app.MapSeminarEndpoints();
+// Note: Internal mapping to /ceo-ai-forum/register
+// IIS Sub-application at /api will make this effectively /api/ceo-ai-forum/register
+app.MapForumEndpoints();
 
 app.Run();

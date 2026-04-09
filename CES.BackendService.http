@@ -1,6 +1,22 @@
-@CES.SeminarAPI_HostAddress = http://localhost:5253
+@CES.ForumAPI_HostAddress = http://localhost:5253
 
-GET {{CES.SeminarAPI_HostAddress}}/weatherforecast/
+GET {{CES.ForumAPI_HostAddress}}/weatherforecast/
 Accept: application/json
+
+###
+
+# Test CEO AI Forum Registration Endpoint
+POST {{CES.ForumAPI_HostAddress}}/ceo-ai-forum/register
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "title": "CEO",
+  "company": "Acme Engineering Inc.",
+  "email": "john.smith@acmeengineering.com",
+  "phone": "301-555-0100",
+  "honeypot": ""
+}
 
 ###

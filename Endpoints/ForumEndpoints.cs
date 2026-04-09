@@ -13,17 +13,17 @@ public static class ForumEndpoints
             IValidator<ForumRegistrationRequest> validator,
             IEmailService emailService) =>
         {
-            // 1. Validation
+            // 1. Honeypot check (Silent drop — runs first to prevent bot fingerprinting)
+            if (!string.IsNullOrWhiteSpace(request.Honeypot))
+            {
+                return Results.Ok(new { message = "Registration received." });
+            }
+
+            // 2. Validation
             var validationResult = await validator.ValidateAsync(request);
             if (!validationResult.IsValid)
             {
                 return Results.ValidationProblem(validationResult.ToDictionary());
-            }
-
-            // 2. Honeypot check (Silent drop)
-            if (!string.IsNullOrWhiteSpace(request.Honeypot))
-            {
-                return Results.Ok(new { message = "Registration received." });
             }
 
             // 3. Send Email

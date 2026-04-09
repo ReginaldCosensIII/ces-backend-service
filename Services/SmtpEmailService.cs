@@ -15,17 +15,17 @@ public class SmtpEmailService : IEmailService
         _options = options.Value;
     }
 
-    public async Task SendRegistrationEmailAsync(SeminarRegistrationRequest request)
+    public async Task SendRegistrationEmailAsync(ForumRegistrationRequest request)
     {
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress("CES Website", _options.FromAddress));
         message.To.Add(new MailboxAddress("Mr. Robertson", _options.ToAddress));
-        message.Subject = $"New Seminar Registration: {request.FirstName} {request.LastName}";
+        message.Subject = $"New CEO AI Forum Registration: {request.FirstName} {request.LastName}";
 
         var bodyBuilder = new BodyBuilder
         {
             HtmlBody = $@"
-                <p>A new registration has been submitted for the Strategic AI Integration & Cybersecurity Lunch & Learn Seminar.</p>
+                <p>A new registration has been submitted for the CEO AI Forum.</p>
                 <p><strong>Details:</strong><br>
                 - First Name: {request.FirstName}<br>
                 - Last Name: {request.LastName}<br>

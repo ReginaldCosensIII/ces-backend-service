@@ -28,12 +28,12 @@ builder.Services.Configure<SmtpOptions>(
 builder.Services.AddTransient<IEmailService, SmtpEmailService>();
 
 // Register FluentValidation
-builder.Services.AddValidatorsFromAssemblyContaining<SeminarRegistrationRequestValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<ForumRegistrationRequestValidator>();
 
 // 2. Add Rate Limiting (5 requests per 10 minutes per IP)
 builder.Services.AddRateLimiter(options =>
 {
-    options.AddFixedWindowLimiter("SeminarRegistrationPolicy", opt =>
+    options.AddFixedWindowLimiter("ForumRegistrationPolicy", opt =>
     {
         opt.PermitLimit = 5;
         opt.Window = TimeSpan.FromMinutes(10);

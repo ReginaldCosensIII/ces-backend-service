@@ -4,13 +4,13 @@ using FluentValidation;
 
 namespace CES.BackendService.Endpoints;
 
-public static class SeminarEndpoints
+public static class ForumEndpoints
 {
-    public static void MapSeminarEndpoints(this IEndpointRouteBuilder app)
+    public static void MapForumEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/seminar/register", async (
-            SeminarRegistrationRequest request,
-            IValidator<SeminarRegistrationRequest> validator,
+        app.MapPost("/ceo-ai-forum/register", async (
+            ForumRegistrationRequest request,
+            IValidator<ForumRegistrationRequest> validator,
             IEmailService emailService) =>
         {
             // 1. Validation
@@ -32,8 +32,8 @@ public static class SeminarEndpoints
             // 4. Success Response
             return Results.Ok(new { message = "Registration received." });
         })
-        .WithName("RegisterSeminar")
-        .RequireRateLimiting("SeminarRegistrationPolicy")
+        .WithName("RegisterForum")
+        .RequireRateLimiting("ForumRegistrationPolicy")
         .WithOpenApi();
     }
 }

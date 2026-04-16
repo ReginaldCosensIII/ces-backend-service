@@ -38,8 +38,12 @@ public class SmtpEmailService : IEmailService
         message.Body = bodyBuilder.ToMessageBody();
 
         using var client = new SmtpClient();
-        await client.ConnectAsync(_options.Host, _options.Port, MailKit.Security.SecureSocketOptions.Auto);
-        
+
+        var secureSocketOptions = _options.EnableSsl
+            ? MailKit.Security.SecureSocketOptions.Auto
+            : MailKit.Security.SecureSocketOptions.None;
+
+        await client.ConnectAsync(_options.Host, _options.Port, secureSocketOptions);
         if (!string.IsNullOrEmpty(_options.Username))
         {
             await client.AuthenticateAsync(_options.Username, _options.Password);

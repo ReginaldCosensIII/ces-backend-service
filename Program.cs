@@ -86,7 +86,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 // Use Rate Limiting
 app.UseRateLimiter();

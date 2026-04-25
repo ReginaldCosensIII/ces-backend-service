@@ -1,13 +1,15 @@
-using System.Threading.RateLimiting;
+using Microsoft.EntityFrameworkCore;
 using CES.BackendService.Contracts;
+using CES.BackendService.Data;
 using CES.BackendService.Endpoints;
 using CES.BackendService.Options;
 using CES.BackendService.Services;
 using CES.BackendService.Validation;
 using FluentValidation;
-using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.RateLimiting;
 using Serilog;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,16 @@ builder.Host.UseSerilog((context, config) => config
 
 // 1. Add Services
 builder.Services.AddOpenApi();
+
+// Register SEO Factory
+builder.Services.AddSingleton<ISeoSchemaFactory, SeoSchemaFactory>();
+
+// Register Memory Cache for SEO Schema caching
+builder.Services.AddMemoryCache();
+
+// Register Database Context
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register SMTP Options
 builder.Services.Configure<SmtpOptions>(
@@ -93,5 +105,6 @@ app.UseRateLimiter();
 // Note: Internal mapping to /ceo-ai-forum/register
 // IIS Sub-application at /api will make this effectively /api/ceo-ai-forum/register
 app.MapForumEndpoints();
+app.MapSeoEndpoints();
 
 app.Run();

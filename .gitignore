@@ -487,3 +487,5 @@ $RECYCLE.BIN/
 *.code-workspace
 .vscode/
 
+# Local Dev Files
+appsettings.Development.json

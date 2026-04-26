@@ -15,7 +15,7 @@ public static class SeoEndpoints
 {
     public static void MapSeoEndpoints(this WebApplication app)
     {
-        app.MapGet("/api/seo/faqs", async (
+        app.MapGet("/seo/faqs", async (
             [FromServices] AppDbContext dbContext,
             [FromServices] IMemoryCache memoryCache,
             [FromServices] ISeoSchemaFactory seoSchemaFactory) =>
@@ -34,7 +34,7 @@ public static class SeoEndpoints
             return Results.Content(schemaString!, "application/ld+json");
         });
 
-        app.MapGet("/api/seo/techtips", async (
+        app.MapGet("/seo/techtips", async (
             [FromServices] AppDbContext dbContext,
             [FromServices] IMemoryCache memoryCache,
             [FromServices] ISeoSchemaFactory seoSchemaFactory) =>

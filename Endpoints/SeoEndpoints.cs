@@ -22,7 +22,7 @@ public static class SeoEndpoints
         {
             if (!memoryCache.TryGetValue("seo_faqs", out string? schemaString))
             {
-                var faqs = await dbContext.Faqs.Where(f => f.IsPublished).ToListAsync();
+                var faqs = await dbContext.Faqs.Where(f => f.IsPublished).OrderBy(f => f.DisplayOrder).ToListAsync();
                 schemaString = seoSchemaFactory.GenerateFaqSchema(faqs);
 
                 var cacheOptions = new MemoryCacheEntryOptions()
@@ -41,7 +41,7 @@ public static class SeoEndpoints
         {
             if (!memoryCache.TryGetValue("seo_techtips", out string? schemaString))
             {
-                var techTips = await dbContext.TechTips.Where(t => t.IsPublished).ToListAsync();
+                var techTips = await dbContext.TechTips.Where(t => t.IsPublished).OrderBy(t => t.DisplayOrder).ToListAsync();
                 schemaString = seoSchemaFactory.GenerateTechTipSchema(techTips);
 
                 var cacheOptions = new MemoryCacheEntryOptions()

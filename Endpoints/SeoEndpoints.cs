@@ -26,7 +26,7 @@ public static class SeoEndpoints
                 schemaString = seoSchemaFactory.GenerateFaqSchema(faqs);
 
                 var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(30));
+                    .SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
 
                 memoryCache.Set("seo_faqs", schemaString, cacheOptions);
             }
@@ -45,7 +45,7 @@ public static class SeoEndpoints
                 schemaString = seoSchemaFactory.GenerateTechTipSchema(techTips);
 
                 var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(30));
+                    .SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
 
                 memoryCache.Set("seo_techtips", schemaString, cacheOptions);
             }

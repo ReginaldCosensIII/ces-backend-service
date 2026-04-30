@@ -53,7 +53,7 @@ public class SeoSchemaFactory : ISeoSchemaFactory
             ["image"] = new Dictionary<string, object>
             {
                 ["@type"] = "ImageObject",
-                ["url"] = "https://www.cesitservice.com/images/socials/tech-tips-social.png"
+                ["url"] = "https://www.cesitservice.com/images/socials/tech-tips-meta-data-img.png"
             },
             ["author"] = new Dictionary<string, object>
             {

@@ -45,11 +45,21 @@ public class SeoSchemaFactory : ISeoSchemaFactory
         var articles = publishedTips.Select(tip => new Dictionary<string, object>
         {
             ["@context"] = "https://schema.org",
-            ["@type"] = "Article",
+            ["@type"] = "TechArticle",
             ["headline"] = tip.Title,
             ["text"] = tip.Content,
             ["datePublished"] = tip.CreatedAt.ToString("O"),
-            ["dateModified"] = (tip.UpdatedAt ?? tip.CreatedAt).ToString("O")
+            ["dateModified"] = (tip.UpdatedAt ?? tip.CreatedAt).ToString("O"),
+            ["image"] = new Dictionary<string, object>
+            {
+                ["@type"] = "ImageObject",
+                ["url"] = "https://www.cesitservice.com/images/socials/tech-tips-meta-data-img.png"
+            },
+            ["author"] = new Dictionary<string, object>
+            {
+                ["@type"] = "Organization",
+                ["name"] = "Computer Enhancement Systems, Inc."
+            }
         }).ToArray();
 
         var schema = new Dictionary<string, object>

@@ -36,3 +36,11 @@ To protect the endpoints from spam and brute-force form submissions, the applica
 - **Rate**: 5 requests
 - **Window**: Every 10 minutes (per IP)
 - Requests exceeding this threshold receive an immediate HTTP 429 response accompanied by a structured `ProblemDetails` message.
+
+## SEO & JSON-LD Schema
+This service provides dynamic JSON-LD schema generation for the public website via the `SeoSchemaFactory`. 
+
+- **Source of Truth**: The `SeoSchemaFactory` is the central location for defining brand metadata standards, including default `Author` (Organization) and social `Image` paths for Tech Articles and FAQs.
+- **Tech Tips**: Generates `TechArticle` schema within an `ItemList`.
+- **FAQs**: Generates `FAQPage` schema.
+- **Caching**: SEO endpoints are cached for 60 seconds to optimize performance while ensuring content updates from the CMS are delivered promptly.

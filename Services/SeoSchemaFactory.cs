@@ -50,6 +50,11 @@ public class SeoSchemaFactory : ISeoSchemaFactory
             ["text"] = tip.Content,
             ["datePublished"] = tip.CreatedAt.ToString("O"),
             ["dateModified"] = (tip.UpdatedAt ?? tip.CreatedAt).ToString("O"),
+            ["image"] = new Dictionary<string, object>
+            {
+                ["@type"] = "ImageObject",
+                ["url"] = "https://www.cesitservice.com/images/socials/tech-tips-social.png"
+            },
             ["author"] = new Dictionary<string, object>
             {
                 ["@type"] = "Organization",

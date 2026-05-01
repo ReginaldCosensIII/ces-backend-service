@@ -21,6 +21,7 @@ builder.Host.UseSerilog((context, config) => config
 
 // 1. Add Services
 builder.Services.AddOpenApi();
+builder.Services.AddProblemDetails();
 
 // Register SEO Factory
 builder.Services.AddSingleton<ISeoSchemaFactory, SeoSchemaFactory>();
@@ -67,30 +68,14 @@ builder.Services.AddRateLimiter(options =>
 
 var app = builder.Build();
 
-app.UseExceptionHandler(exceptionHandlerApp =>
+if (app.Environment.IsDevelopment())
 {
-    exceptionHandlerApp.Run(async context =>
-    {
-        var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
-        var exception = exceptionHandlerPathFeature?.Error;
-        var path = exceptionHandlerPathFeature?.Path;
-
-        var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
-        logger.LogError(exception, "Unhandled exception occurred while processing request path: {RequestPath}", path);
-
-        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-        
-        var detail = app.Environment.IsDevelopment()
-            ? exception?.ToString()
-            : "An error occurred while processing your registration. Our team has been notified.";
-
-        await context.Response.WriteAsJsonAsync(new Microsoft.AspNetCore.Mvc.ProblemDetails
-        {
-            Status = StatusCodes.Status500InternalServerError,
-            Detail = detail
-        });
-    });
-});
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler();
+}
 
 // 3. Configure HTTP Pipeline
 if (app.Environment.IsDevelopment())

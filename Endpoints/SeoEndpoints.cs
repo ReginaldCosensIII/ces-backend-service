@@ -8,6 +8,7 @@ using CES.BackendService.Services;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace CES.BackendService.Endpoints;
 
@@ -18,39 +19,57 @@ public static class SeoEndpoints
         app.MapGet("/seo/faqs", async (
             [FromServices] AppDbContext dbContext,
             [FromServices] IMemoryCache memoryCache,
-            [FromServices] ISeoSchemaFactory seoSchemaFactory) =>
+            [FromServices] ISeoSchemaFactory seoSchemaFactory,
+            [FromServices] ILogger<Program> logger) =>
         {
-            if (!memoryCache.TryGetValue("seo_faqs", out string? schemaString))
+            try
             {
-                var faqs = await dbContext.Faqs.Where(f => f.IsPublished).OrderBy(f => f.DisplayOrder).ToListAsync();
-                schemaString = seoSchemaFactory.GenerateFaqSchema(faqs);
+                if (!memoryCache.TryGetValue("seo_faqs", out string? schemaString))
+                {
+                    var faqs = await dbContext.Faqs.Where(f => f.IsPublished).OrderBy(f => f.DisplayOrder).ToListAsync();
+                    schemaString = seoSchemaFactory.GenerateFaqSchema(faqs);
 
-                var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
+                    var cacheOptions = new MemoryCacheEntryOptions()
+                        .SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
 
-                memoryCache.Set("seo_faqs", schemaString, cacheOptions);
+                    memoryCache.Set("seo_faqs", schemaString, cacheOptions);
+                }
+
+                return Results.Content(schemaString!, "application/ld+json");
             }
-
-            return Results.Content(schemaString!, "application/ld+json");
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred while fetching {EndpointEntity}", "Faqs");
+                return Results.Problem(detail: "An unexpected error occurred processing your request.", statusCode: 500);
+            }
         });
 
         app.MapGet("/seo/techtips", async (
             [FromServices] AppDbContext dbContext,
             [FromServices] IMemoryCache memoryCache,
-            [FromServices] ISeoSchemaFactory seoSchemaFactory) =>
+            [FromServices] ISeoSchemaFactory seoSchemaFactory,
+            [FromServices] ILogger<Program> logger) =>
         {
-            if (!memoryCache.TryGetValue("seo_techtips", out string? schemaString))
+            try
             {
-                var techTips = await dbContext.TechTips.Where(t => t.IsPublished).OrderBy(t => t.DisplayOrder).ToListAsync();
-                schemaString = seoSchemaFactory.GenerateTechTipSchema(techTips);
+                if (!memoryCache.TryGetValue("seo_techtips", out string? schemaString))
+                {
+                    var techTips = await dbContext.TechTips.Where(t => t.IsPublished).OrderBy(t => t.DisplayOrder).ToListAsync();
+                    schemaString = seoSchemaFactory.GenerateTechTipSchema(techTips);
 
-                var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
+                    var cacheOptions = new MemoryCacheEntryOptions()
+                        .SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
 
-                memoryCache.Set("seo_techtips", schemaString, cacheOptions);
+                    memoryCache.Set("seo_techtips", schemaString, cacheOptions);
+                }
+
+                return Results.Content(schemaString!, "application/ld+json");
             }
-
-            return Results.Content(schemaString!, "application/ld+json");
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred while fetching {EndpointEntity}", "TechTips");
+                return Results.Problem(detail: "An unexpected error occurred processing your request.", statusCode: 500);
+            }
         });
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using CES.BackendService.Models;
 
 namespace CES.BackendService.Services;
@@ -42,24 +43,41 @@ public class SeoSchemaFactory : ISeoSchemaFactory
     {
         var publishedTips = techTips.Where(t => t.IsPublished == true);
 
-        var articles = publishedTips.Select(tip => new Dictionary<string, object>
+        var articles = publishedTips.Select(tip => 
         {
-            ["@context"] = "https://schema.org",
-            ["@type"] = "TechArticle",
-            ["headline"] = tip.Title,
-            ["text"] = tip.Content,
-            ["datePublished"] = tip.CreatedAt.ToString("O"),
-            ["dateModified"] = (tip.UpdatedAt ?? tip.CreatedAt).ToString("O"),
-            ["image"] = new Dictionary<string, object>
+            var dict = new Dictionary<string, object>
             {
-                ["@type"] = "ImageObject",
-                ["url"] = "https://www.cesitservice.com/images/socials/tech-tips-meta-data-img.png"
-            },
-            ["author"] = new Dictionary<string, object>
+                ["@context"] = "https://schema.org",
+                ["@type"] = "TechArticle",
+                ["headline"] = tip.Title,
+                ["text"] = tip.Content,
+                ["datePublished"] = tip.CreatedAt.ToString("O"),
+                ["dateModified"] = (tip.UpdatedAt ?? tip.CreatedAt).ToString("O"),
+                ["image"] = new Dictionary<string, object>
+                {
+                    ["@type"] = "ImageObject",
+                    ["url"] = "https://www.cesitservice.com/images/socials/tech-tips-meta-data-img.png"
+                },
+                ["author"] = new Dictionary<string, object>
+                {
+                    ["@type"] = "Organization",
+                    ["name"] = "Computer Enhancement Systems, Inc."
+                }
+            };
+
+            if (!string.IsNullOrWhiteSpace(tip.VideoUrl))
             {
-                ["@type"] = "Organization",
-                ["name"] = "Computer Enhancement Systems, Inc."
+                dict["video"] = new Dictionary<string, object>
+                {
+                    ["@type"] = "VideoObject",
+                    ["name"] = tip.Title,
+                    ["uploadDate"] = tip.CreatedAt.ToString("O"),
+                    ["embedUrl"] = Regex.Replace(tip.VideoUrl, @"watch\?v=([a-zA-Z0-9_-]+)", "embed/$1"),
+                    ["thumbnailUrl"] = "/images/socials/tech-tips-social.png"
+                };
             }
+
+            return dict;
         }).ToArray();
 
         var schema = new Dictionary<string, object>

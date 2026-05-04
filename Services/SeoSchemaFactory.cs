@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using CES.BackendService.Models;
 
 namespace CES.BackendService.Services;
@@ -71,7 +72,7 @@ public class SeoSchemaFactory : ISeoSchemaFactory
                     ["@type"] = "VideoObject",
                     ["name"] = tip.Title,
                     ["uploadDate"] = tip.CreatedAt.ToString("O"),
-                    ["embedUrl"] = tip.VideoUrl,
+                    ["embedUrl"] = Regex.Replace(tip.VideoUrl, @"watch\?v=([a-zA-Z0-9_-]+)", "embed/$1"),
                     ["thumbnailUrl"] = "/images/socials/tech-tips-social.png"
                 };
             }

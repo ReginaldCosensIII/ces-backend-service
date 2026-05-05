@@ -67,10 +67,17 @@ public class SeoSchemaFactory : ISeoSchemaFactory
 
             if (!string.IsNullOrWhiteSpace(tip.VideoUrl))
             {
+                var description = Regex.Replace(tip.Content ?? "", "<.*?>", string.Empty);
+                if (description.Length > 160)
+                {
+                    description = description.Substring(0, 160);
+                }
+
                 dict["video"] = new Dictionary<string, object>
                 {
                     ["@type"] = "VideoObject",
                     ["name"] = tip.Title,
+                    ["description"] = description.Trim(),
                     ["uploadDate"] = tip.CreatedAt.ToString("O"),
                     ["embedUrl"] = Regex.Replace(tip.VideoUrl, @"watch\?v=([a-zA-Z0-9_-]+)", "embed/$1"),
                     ["thumbnailUrl"] = "/images/socials/tech-tips-social.png"

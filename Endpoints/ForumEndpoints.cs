@@ -43,7 +43,6 @@ public static class ForumEndpoints
             }
         })
         .WithName("RegisterForum")
-        .RequireRateLimiting("ForumRegistrationPolicy")
-        .WithOpenApi();
+        .RequireRateLimiting("ForumRegistrationPolicy");
     }
 }

@@ -86,11 +86,7 @@ if (app.Environment.IsDevelopment())
 // Use Rate Limiting
 app.UseRateLimiter();
 
-// Setup Path Base for local dev to match IIS routing
-if (app.Environment.IsDevelopment())
-{
-    app.UsePathBase("/api");
-}
+
 
 // 4. Map Endpoints
 // Note: Internal mapping to /ceo-ai-forum/register

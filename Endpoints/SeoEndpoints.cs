@@ -29,10 +29,7 @@ public static class SeoEndpoints
                     var faqs = await dbContext.Faqs.Where(f => f.IsPublished).OrderBy(f => f.DisplayOrder).ToListAsync();
                     schemaString = seoSchemaFactory.GenerateFaqSchema(faqs);
 
-                    var cacheOptions = new MemoryCacheEntryOptions()
-                        .SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
-
-                    memoryCache.Set("seo_faqs", schemaString, cacheOptions);
+                    memoryCache.Set("seo_faqs", schemaString);
                 }
 
                 return Results.Content(schemaString!, "application/ld+json");
@@ -57,10 +54,7 @@ public static class SeoEndpoints
                     var techTips = await dbContext.TechTips.Where(t => t.IsPublished).OrderBy(t => t.DisplayOrder).ToListAsync();
                     schemaString = seoSchemaFactory.GenerateTechTipSchema(techTips);
 
-                    var cacheOptions = new MemoryCacheEntryOptions()
-                        .SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
-
-                    memoryCache.Set("seo_techtips", schemaString, cacheOptions);
+                    memoryCache.Set("seo_techtips", schemaString);
                 }
 
                 return Results.Content(schemaString!, "application/ld+json");
@@ -68,6 +62,23 @@ public static class SeoEndpoints
             catch (Exception ex)
             {
                 logger.LogError(ex, "An error occurred while fetching {EndpointEntity}", "TechTips");
+                return Results.Problem(detail: "An unexpected error occurred processing your request.", statusCode: 500);
+            }
+        });
+
+        app.MapPost("/seo/flush-cache", (
+            [FromServices] IMemoryCache memoryCache,
+            [FromServices] ILogger<Program> logger) =>
+        {
+            try
+            {
+                memoryCache.Remove("seo_faqs");
+                memoryCache.Remove("seo_techtips");
+                return Results.Ok();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred while flushing the SEO cache");
                 return Results.Problem(detail: "An unexpected error occurred processing your request.", statusCode: 500);
             }
         });

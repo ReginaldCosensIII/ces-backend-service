@@ -41,7 +41,7 @@ public static class SeoEndpoints
             }
         });
 
-        app.MapGet("/seo/techtips", async (
+        app.MapGet("/seo/tech-tips", async (
             [FromServices] AppDbContext dbContext,
             [FromServices] IMemoryCache memoryCache,
             [FromServices] ISeoSchemaFactory seoSchemaFactory,

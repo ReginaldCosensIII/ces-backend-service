@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, config) => config
     .Enrich.FromLogContext()
     .WriteTo.Console()
-    .WriteTo.File("C:/logs/ces-backend/log-.txt", rollingInterval: RollingInterval.Day));
+    .WriteTo.File("C:/logs/ces-backend/log-.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 30));
 
 // 1. Add Services
 builder.Services.AddOpenApi();
